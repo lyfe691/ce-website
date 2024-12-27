@@ -4,6 +4,7 @@ import { Chrome, Star } from "lucide-react";
 export const StorePreview = () => {
   return (
     <div className="relative bg-gradient-to-t from-gray-900 to-purple-900/20 py-24 sm:py-32">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,17 +41,23 @@ export const StorePreview = () => {
               </div>
             </div>
           </div>
-          <div className="mt-8 flex justify-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="mt-8 flex justify-center"
+          >
             <a
               href="https://chrome.google.com/webstore"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 rounded-lg bg-purple-600/10 text-purple-400 hover:bg-purple-600/20 transition-colors duration-200 backdrop-blur-sm ring-1 ring-purple-400/20"
+              className="group inline-flex items-center px-6 py-3 rounded-lg bg-purple-600/10 text-purple-400 hover:bg-purple-600/20 transition-colors duration-200 backdrop-blur-sm ring-1 ring-purple-400/20"
             >
-              <Chrome className="mr-2 h-5 w-5" />
+              <Chrome className="mr-2 h-5 w-5 transition-transform group-hover:rotate-12" />
               View in Chrome Web Store
             </a>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>

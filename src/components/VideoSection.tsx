@@ -1,22 +1,23 @@
-// VideoSection.tsx
+// components/VideoSection.tsx
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Play, X } from "lucide-react";
+import ReactPlayer from "react-player";
 
 export const VideoSection = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
-  // Close modal on Esc key press
+  // Handle Esc key to stop video
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setIsModalOpen(false);
+      if (e.key === "Escape" && isVideoPlaying) {
+        setIsVideoPlaying(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [isVideoPlaying]);
 
   return (
     <div className="relative bg-gradient-to-b from-gray-900/50 to-purple-900/20 py-24 sm:py-32">
@@ -41,12 +42,11 @@ export const VideoSection = () => {
           </p>
         </motion.div>
 
-        {/* Video Placeholder */}
+        {/* Video Placeholder or Video Player */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
           className="mt-16"
         >
           <div className="relative mx-auto max-w-4xl group">
@@ -56,72 +56,66 @@ export const VideoSection = () => {
             {/* Video Container */}
             <div className="relative aspect-video rounded-xl bg-gray-800/50 shadow-2xl ring-1 ring-gray-700/50 overflow-hidden">
               {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-gray-900/50"></div>
+              {!isVideoPlaying && (
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-gray-900/50"></div>
+              )}
 
-              {/* Play Button */}
+              {/* Play Button or Video Player */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsModalOpen(true)}
-                  className="rounded-full bg-purple-600/20 p-6 backdrop-blur-sm cursor-pointer group/play"
-                >
-                  <Play className="h-12 w-12 text-purple-400 transition-transform group-hover/play:scale-110" />
-                </motion.div>
+                {!isVideoPlaying ? (
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setIsVideoPlaying(true)}
+                    className="rounded-full bg-purple-600/20 p-6 backdrop-blur-sm cursor-pointer"
+                    aria-label="Play Video"
+                  >
+                    <Play className="h-12 w-12 text-purple-400 transition-transform" />
+                  </motion.div>
+                ) : (
+                  <div className="relative w-full h-full">
+                    {/* Close Button */}
+                    <button
+                      className="absolute top-4 right-4 text-white bg-gray-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-75 transition-colors"
+                      onClick={() => setIsVideoPlaying(false)}
+                      aria-label="Close Video"
+                    >
+                      <X className="h-6 w-6" />
+                    </button>
+
+                    {/* React Player */}
+                    <ReactPlayer
+                      url="https://www.youtube.com/watch?v=YOUR_VIDEO_ID" // Replace with your video URL
+                      playing={isVideoPlaying}
+                      controls
+                      width="100%"
+                      height="100%"
+                      className="absolute top-0 left-0 rounded-xl"
+                      config={{
+                        youtube: {
+                          playerVars: { 
+                            autoplay: 1,
+                            mute: 0,
+                          },
+                        },
+                      }}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Instruction Text */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-gray-900/80 to-transparent">
-                <p className="text-sm text-gray-300 text-center">
-                  Click to watch the demo video
-                </p>
-              </div>
+              {!isVideoPlaying && (
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-gray-900/80 to-transparent">
+                  <p className="text-sm text-gray-300 text-center">
+                    Click to watch the demo video
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
       </div>
-
-      {/* Modal for Video Playback */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsModalOpen(false)}
-          >
-            <motion.div
-              className="relative w-full max-w-3xl mx-4"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
-            >
-              {/* Close Button */}
-              <button
-                className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
-                onClick={() => setIsModalOpen(false)}
-                aria-label="Close Video"
-              >
-                <X className="h-6 w-6" />
-              </button>
-
-              {/* Video Element */}
-              <div className="relative pb-[56.25%]"> {/* 16:9 Aspect Ratio */}
-                <iframe
-                  src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1"
-                  title="Demo Video"
-                  className="absolute top-0 left-0 w-full h-full rounded-xl"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

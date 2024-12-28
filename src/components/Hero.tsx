@@ -2,14 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Chrome } from "lucide-react";
+import { Chrome, Users } from "lucide-react"; // Import Users icon
 import { useTypewriter, Cursor } from "react-simple-typewriter";
 
 export const Hero = () => {
   // Define the text for the typewriter effect
   const [text] = useTypewriter({
     words: [
-      
       "A Chrome Extension to Extract Code from Websites.",
       "Save the extracted code to your local machine.",
       "Packages the extracted code into a zip file.",
@@ -47,7 +46,7 @@ export const Hero = () => {
 
             {/* Title */}
             <h1 className="text-5xl font-bold tracking-tight text-white sm:text-7xl">
-            Website Code
+              Website Code
               <span className="relative whitespace-nowrap">
                 <svg
                   aria-hidden="true"
@@ -74,11 +73,22 @@ export const Hero = () => {
               <Cursor cursorStyle="|" />
             </motion.p>
 
-            {/* Call to Action */}
+            {/* User Count */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-6 flex items-center justify-center text-gray-200"
+            >
+              <Users className="h-6 w-6 mr-2 text-purple-500" aria-label="Users Icon" />
+              <span className="text-xl font-semibold">330+ Users</span>
+            </motion.div>
+
+            {/* Call to Action */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
               className="mt-10 flex items-center justify-center gap-x-6"
             >
               <Button

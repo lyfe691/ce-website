@@ -4,17 +4,19 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: mode === "production" ? "https://wce.ysz.life/" : "/",
+  base: mode === "production" ? "/" : "/", 
   server: {
-    host: "::",
+    host: true, 
     port: 8080,
   },
-  plugins: [
-    react(),
-  ],
+  build: {
+    outDir: "dist",
+    emptyOutDir: true, 
+  },
+  plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(__dirname, "./src"), 
     },
   },
 }));

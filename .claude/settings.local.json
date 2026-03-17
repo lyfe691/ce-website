@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:chromewebstore.google.com)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm dlx:*)",
+      "Bash(cd:*)",
+      "Bash(timeout:*)",
+      "Bash(sleep:*)"
+    ]
+  }
+}

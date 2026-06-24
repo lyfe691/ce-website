@@ -38,7 +38,7 @@ export default function HeroSection() {
               <Star key={i} className="size-3 fill-amber-400 text-amber-400" />
             ))}
           </div>
-          <span className="text-xs text-muted-foreground">2,000+ users</span>
+          <span className="text-xs text-muted-foreground">4,000+ users</span>
         </div>
 
         <TextScatter
